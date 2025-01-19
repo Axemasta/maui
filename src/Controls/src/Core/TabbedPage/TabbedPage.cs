@@ -23,6 +23,14 @@ namespace Microsoft.Maui.Controls
 		/// <summary>Bindable property for <see cref="SelectedTabColor"/>.</summary>
 		public static readonly BindableProperty SelectedTabColorProperty = BindableProperty.Create(nameof(SelectedTabColor), typeof(Color), typeof(TabbedPage), default(Color));
 
+		/// <summary>
+		/// Manages the bottom tab bar visibility.
+		/// </summary>
+		/// <remarks>
+		/// The tab bar and tabs are visible by default. 
+		/// </remarks>
+		public static readonly BindableProperty TabBarIsVisibleProperty = BindableProperty.CreateAttached("TabBarIsVisible", typeof(bool), typeof(TabbedPage), true);
+
 		readonly Lazy<PlatformConfigurationRegistry<TabbedPage>> _platformConfigurationRegistry;
 
 		/// <include file="../../docs/Microsoft.Maui.Controls/TabbedPage.xml" path="//Member[@MemberName='BarBackgroundColor']/Docs/*" />
@@ -58,6 +66,23 @@ namespace Microsoft.Maui.Controls
 			get => (Color)GetValue(SelectedTabColorProperty);
 			set => SetValue(SelectedTabColorProperty, value);
 		}
+
+		/// <summary>
+		/// Gets the tabs visibility when the given <paramref name="obj"/> is active.
+		/// </summary>
+		/// <param name="obj">The object that modifies the tabs visibility.</param>
+		/// <returns><see langword="true"/> if the tab bar is visible; otherwise, <see langword="false"/>.</returns>
+		public static bool GetTabBarIsVisible(BindableObject obj) => (bool)obj.GetValue(TabBarIsVisibleProperty);
+
+		/// <summary>
+		/// Sets the tabs visibility when the given <paramref name="obj"/> is active.
+		/// </summary>
+		/// <remarks>
+		/// The tab bar and tabs are visible by default. However, the tab bar can be hidden by setting the TabbedPage.TabBarIsVisible attached property to false.
+		/// </remarks>
+		/// <param name="obj">The object that modifies the tabs visibility.</param>
+		/// <param name="value"><see langword="true"/> to set the tab bar as visible; otherwise, <see langword="false"/>.</param>
+		public static void SetTabBarIsVisible(BindableObject obj, bool value) => obj.SetValue(TabBarIsVisibleProperty, value);
 
 		protected override Page CreateDefault(object item)
 		{

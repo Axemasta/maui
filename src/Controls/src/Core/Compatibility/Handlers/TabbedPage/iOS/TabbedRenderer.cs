@@ -164,6 +164,10 @@ namespace Microsoft.Maui.Controls.Handlers.Compatibility
 			if (page?.Handler is not IPlatformViewHandler nvh)
 				return null;
 
+			var tabBarIsVisible = TabbedPage.GetTabBarIsVisible(page);
+
+			nvh.ViewController.HidesBottomBarWhenPushed = !tabBarIsVisible;
+
 			return nvh.ViewController;
 		}
 
@@ -239,6 +243,8 @@ namespace Microsoft.Maui.Controls.Handlers.Compatibility
 				UpdatePageSpecifics();
 			else if (e.PropertyName == TabbedPageConfiguration.TranslucencyModeProperty.PropertyName)
 				UpdateBarTranslucent();
+			else if (e.PropertyName == TabbedPage.TabBarIsVisibleProperty.PropertyName)
+				UpdateTabBarVisibility();
 
 		}
 
@@ -445,6 +451,23 @@ namespace Microsoft.Maui.Controls.Handlers.Compatibility
 				default:
 					TabBar.Translucent = _defaultBarTranslucent.GetValueOrDefault();
 					return;
+			}
+		}
+
+		void UpdateTabBarVisibility()
+		{
+			if (Tabbed == null || TabBar == null || Element is not VisualElement element)
+				return;
+
+			var hidden = TabbedPage.GetTabBarIsVisible(element);
+
+			if (OperatingSystemMacCatalyst18Workaround.IsMacCatalystVersionAtLeast18() || OperatingSystem.IsIOSVersionAtLeast(18))
+			{
+				TabBarHidden = hidden;
+			}
+			else
+			{
+				TabBar.Hidden = hidden;
 			}
 		}
 
