@@ -329,6 +329,7 @@ namespace Microsoft.Maui.Controls.Handlers
 					bottomNavigationView.SetOnItemSelectedListener(_listeners);
 				}
 
+				UpdateTabBarVisibility();
 				UpdateIgnoreContainerAreas();
 			}
 			else
@@ -508,6 +509,19 @@ namespace Microsoft.Maui.Controls.Handlers
 
 			if (Element.CurrentPage == null && Element.Children.Count > 0)
 				Element.CurrentPage = Element.Children[0];
+		}
+
+		protected virtual void UpdateTabBarVisibility()
+		{
+			//if (DisplayedPage is null)
+			//	return;
+			// TODO: Verify what I need to check here!
+			if (Element is null || !IsBottomTabPlacement)
+			{
+				return;
+			}
+
+			_bottomNavigationView.Visibility = true ? ViewStates.Visible : ViewStates.Gone;
 		}
 
 		void UpdateTabIcons()
